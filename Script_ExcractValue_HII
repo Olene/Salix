@@ -1,0 +1,46 @@
+
+
+# Extract Value
+install.packages(c("terra", "data.table", "sf"))
+library(terra)
+library(data.table)
+library(sf)
+
+salix <- read.csv("Salix.csv")
+
+HII <- rast("HII_Ukraine.tif") 
+
+coords <- vect(salix, geom = c("Longitude", "Latitude"), crs = "EPSG:4326")
+
+coords <- project(coords, crs(nitrogen_raster))
+
+ex_values <- extract(HII, coords)
+
+setDT(salix)
+salix[, HII := ex_values[, 2]]
+
+
+# BoxPlot
+install.packages("ggplot2")
+install.packages("tidyverse")
+install.packages("hrbrthemes")
+install.packages("viridis")
+
+   
+library(ggplot2)
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+
+salix %>%
+  ggplot( aes(x=HII, y=species, fill=species)) +
+  geom_violin() +
+  scale_fill_viridis(discrete = TRUE, alpha=0.6, option="A") +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    plot.title = element_text(size=11)
+  ) +
+  ggtitle("HII") +
+  xlab("")
+
