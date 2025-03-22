@@ -15,6 +15,9 @@ salix <- unique(salix)
 summary_salix <- table(salix$species)
 View(summary_salix)
 
+# Delete species with less than 1 occurrence
+salix <- salix[, .SD[.N > 1], by = species]
+
 HII <- rast("HII_Ukraine.tif") 
 
 coords <- vect(salix, geom = c("Longitude", "Latitude"), crs = "EPSG:4326")
