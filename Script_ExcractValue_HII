@@ -12,6 +12,9 @@ salix <- read.csv("Salix.csv")
 salix <- na.omit(salix)
 salix <- unique(salix)
 
+summary_salix <- table(salix$species)
+View(summary_salix)
+
 HII <- rast("HII_Ukraine.tif") 
 
 coords <- vect(salix, geom = c("Longitude", "Latitude"), crs = "EPSG:4326")
