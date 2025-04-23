@@ -19,8 +19,10 @@ View(summary_salix)
 setDT(salix)
 salix <- salix[, .SD[.N > 1], by = species]
 
+# Open Geitiff
 HII <- rast("HII_Ukraine.tif") 
 
+# Extract Value per point
 coords <- vect(salix, geom = c("Longitude", "Latitude"), crs = "EPSG:4326")
 
 coords <- project(coords, crs(HII))
@@ -30,6 +32,8 @@ ex_values <- extract(HII, coords)
 setDT(salix)
 salix[, HII := ex_values[, 2]]
 
+# Delete value with HII less than 1
+salix <- salix[HII >=1]
 
 # BoxPlot
 install.packages("ggplot2")
