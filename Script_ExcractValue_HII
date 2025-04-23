@@ -16,6 +16,7 @@ summary_salix <- table(salix$species)
 View(summary_salix)
 
 # Delete species with less than 1 occurrence
+setDT(salix)
 salix <- salix[, .SD[.N > 1], by = species]
 
 HII <- rast("HII_Ukraine.tif") 
